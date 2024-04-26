@@ -1,27 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
 import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import ContactList from "./components/ContactList/ContactList.jsx";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
-  const initialContacts = [
-    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-  ];
-  const [contacts, setContacts] = useState(() => {
-    const stringifiedContacts = localStorage.getItem("contacts");
-    if (!stringifiedContacts) return initialContacts;
-    const parsedContacts = JSON.parse(stringifiedContacts);
-    return parsedContacts;
+  const dispatch = useDispatch;
+
+  const contacts = useSelector((state) => {
+    return state.contacts.items;
   });
-  const [filter, setFilter] = useState("");
+
+  const filter = useSelector((state) => {
+    return state.filters.name;
+  });
 
   useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+    // localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
   const addContact = (formData) => {
@@ -31,17 +28,18 @@ function App() {
       name: contactName,
       number: contactNumber,
     };
-    setContacts((prevState) => [...prevState, finalContact]);
+    const action = { type: "contacts/ADD_CONTACT", payload: finalContact };
+    dispatch(action);
   };
 
   const deleteContact = (contactId) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== contactId)
-    );
+    const action = { type: "contacts/DELETE_CONTACT", payload: contactId };
+    dispatch(action);
   };
 
   const onChangeFilter = (e) => {
-    setFilter(e.target.value);
+    const action = { type: "filters/CHANGE_FILTER", payload: e.target.value };
+    dispatch(action);
   };
 
   const filteredContacts = contacts.filter(
