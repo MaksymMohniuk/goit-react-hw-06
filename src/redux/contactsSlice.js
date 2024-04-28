@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const INITIAL_STATE = {
-  contacts: {
-    items: [],
-  },
+  items: [],
 };
 
 const contactsSlice = createSlice({
@@ -13,10 +11,10 @@ const contactsSlice = createSlice({
   // Об'єкт редюсерів
   reducers: {
     addContact(state, action) {
-      state.contacts.items.push(action.payload);
+      state.items.push(action.payload);
     },
     deleteContact(state, action) {
-      state.contacts.items = state.contacts.items.filter(
+      state.items = state.items.filter(
         (contact) => contact.id !== action.payload
       );
     },
