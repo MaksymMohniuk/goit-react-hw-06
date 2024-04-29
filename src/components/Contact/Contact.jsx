@@ -16,7 +16,7 @@ const Contact = ({ contact }) => {
         className={styles.deleteButton}
         type="button"
         onClick={() => {
-          onDeleteHandler;
+          onDeleteHandler();
         }}
       >
         Delete
